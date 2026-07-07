@@ -3,9 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ray Burgos — Full-Stack Developer</title>
-<meta name="description" content="Ray Burgos — self-taught full-stack developer. Built and shipped two production SaaS platforms. Available for hire and freelance web/app work.">
+<title>Ray Burgos — Full-Stack & Mobile App Developer</title>
+<meta name="description" content="Ray Burgos — self-taught full-stack and mobile app developer. Built and shipped two production SaaS platforms with native iOS/Android apps. Available for hire and freelance web/app work.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#1B1F23">
+
+<!-- TODO: once your domain is live, update the 3 URLs below (canonical + og:url + twitter) to match it -->
+<link rel="canonical" href="https://rayburgos.dev/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ray Burgos — Full-Stack & Mobile App Developer">
+<meta property="og:description" content="Built and shipped two production SaaS platforms — web and native iOS/Android — solo, end to end. Available for hire and freelance work.">
+<meta property="og:url" content="https://rayburgos.dev/">
+<meta property="og:site_name" content="Ray Burgos">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ray Burgos — Full-Stack & Mobile App Developer">
+<meta name="twitter:description" content="Built and shipped two production SaaS platforms — web and native iOS/Android — solo, end to end.">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231B1F23'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='34' font-weight='700' fill='%23C1652F' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231B1F23'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='34' font-weight='700' fill='%23C1652F' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -199,7 +219,8 @@
   .project:last-child{border-bottom:1px solid var(--line);}
   @media(max-width:700px){ .project{grid-template-columns:1fr; gap:14px;} }
   .project-meta{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--paper-dim);}
-  .project-meta .url{color:var(--copper-light); display:block; margin-top:8px;}
+  .project-meta .url{color:var(--copper-light); display:inline-block; margin-top:8px; text-decoration:none; border-bottom:1px solid transparent; transition:border-color .15s;}
+  .project-meta .url:hover, .project-meta .url:focus-visible{border-bottom-color:var(--copper-light);}
   .project h3{font-size:21px; margin-bottom:10px;}
   .project ul{padding-left:20px; color:var(--paper-dim); font-size:15px;}
   .project li{margin-bottom:6px;}
@@ -218,9 +239,10 @@
 
   /* ---- services ---- */
   .services-grid{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
   }
-  @media(max-width:760px){ .services-grid{grid-template-columns:1fr;} }
+  @media(max-width:900px){ .services-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:520px){ .services-grid{grid-template-columns:1fr;} }
   .service{
     border:1px solid var(--line);
     border-radius:4px;
@@ -287,7 +309,7 @@
 
 <section class="hero">
   <div class="wrap">
-    <div class="eyebrow">Full-Stack Developer · Cartersville, GA</div>
+    <div class="eyebrow">Full-Stack &amp; Mobile App Developer · Cartersville, GA</div>
     <h1>Built two products solo. <span class="accent">Ready to build yours.</span></h1>
     <p class="lede">
       Self-taught developer who designed, built, and shipped two production SaaS platforms end to end —
@@ -335,6 +357,7 @@
             <div class="line-item"><span class="li-label">Business sites</span><span class="li-val">from $1,500</span></div>
             <div class="line-item"><span class="li-label">Site refresh</span><span class="li-val">quote on request</span></div>
             <div class="line-item"><span class="li-label">Small web apps</span><span class="li-val">quote on request</span></div>
+            <div class="line-item"><span class="li-label">iOS / Android apps</span><span class="li-val">quote on request</span></div>
           </div>
           <div class="ticket-cta">
             <a href="#contact" class="btn btn-primary" style="width:100%; justify-content:center;">Request a quote</a>
@@ -356,7 +379,7 @@
     <div class="project">
       <div class="project-meta">
         KEYMACRO.FIT
-        <span class="url">app.keymacro.fit</span>
+        <a class="url" href="https://app.keymacro.fit" target="_blank" rel="noopener">app.keymacro.fit ↗</a>
       </div>
       <div>
         <h3>AI-powered nutrition & training platform</h3>
@@ -377,7 +400,7 @@
     <div class="project">
       <div class="project-meta">
         SLIDEPRESS
-        <span class="url">slidepress.co</span>
+        <a class="url" href="https://www.slidepress.co" target="_blank" rel="noopener">slidepress.co ↗</a>
       </div>
       <div>
         <h3>AI-powered social media content platform</h3>
@@ -389,7 +412,7 @@
         </ul>
         <div class="stack">
           <span class="chip">Next.js</span><span class="chip">React</span><span class="chip">Supabase</span>
-          <span class="chip">Gemini</span><span class="chip">Vercel</span><span class="chip">OAuth</span>
+          <span class="chip">Capacitor</span><span class="chip">Gemini</span><span class="chip">OAuth</span>
         </div>
       </div>
     </div>
@@ -418,6 +441,11 @@
         <div class="num mono">03</div>
         <h4>Small web apps</h4>
         <p>Booking systems, ordering tools, simple dashboards — custom-built for how your business runs.</p>
+      </div>
+      <div class="service">
+        <div class="num mono">04</div>
+        <h4>iOS & Android apps</h4>
+        <p>Native-feeling mobile apps for iOS and Android from a single codebase — built and shipped twice already.</p>
       </div>
     </div>
   </div>
