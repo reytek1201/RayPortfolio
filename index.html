@@ -58,6 +58,7 @@
       var(--charcoal);
   }
   body.menu-open{overflow:hidden;}
+  body.resume-open{overflow:hidden;}
   .mono{font-family:'IBM Plex Mono', monospace;}
   a{color:inherit;}
   img{max-width:100%; display:block;}
@@ -139,21 +140,27 @@
     opacity:0; visibility:hidden; transition:opacity .35s var(--ease-out), visibility .35s;
   }
   .mobile-nav.is-open{opacity:1; visibility:visible;}
-  .mobile-nav a{
+  .mobile-nav a,
+  .mobile-nav button.nav-audience{
     font-family:'IBM Plex Mono', monospace; font-size:clamp(22px, 6vw, 28px);
     font-weight:600; text-decoration:none; color:var(--paper-dim);
     padding:14px 24px; min-height:44px; display:flex; align-items:center;
     transition:color .2s, transform .3s var(--ease-out);
     transform:translateY(12px); opacity:0;
+    background:none; border:none; cursor:pointer;
   }
-  .mobile-nav.is-open a{transform:translateY(0); opacity:1;}
+  .mobile-nav.is-open a,
+  .mobile-nav.is-open button.nav-audience{transform:translateY(0); opacity:1;}
   .mobile-nav.is-open a:nth-child(1){transition-delay:.05s;}
   .mobile-nav.is-open a:nth-child(2){transition-delay:.1s;}
   .mobile-nav.is-open a:nth-child(3){transition-delay:.15s;}
   .mobile-nav.is-open a:nth-child(4){transition-delay:.2s;}
   .mobile-nav.is-open a:nth-child(5){transition-delay:.25s;}
   .mobile-nav.is-open a:nth-child(6){transition-delay:.3s;}
-  .mobile-nav a:hover, .mobile-nav a:focus-visible{color:var(--copper-light);}
+  .mobile-nav.is-open button.nav-audience{transition-delay:.35s;}
+  .mobile-nav.is-open a:nth-child(8){transition-delay:.4s;}
+  .mobile-nav a:hover, .mobile-nav a:focus-visible,
+  .mobile-nav button.nav-audience:hover, .mobile-nav button.nav-audience:focus-visible{color:var(--copper-light);}
   .mobile-nav .nav-divider{
     width:48px; height:1px; background:var(--line); margin:12px 0;
     transform:translateY(12px); opacity:0; transition:opacity .3s .2s, transform .3s .2s var(--ease-out);
@@ -322,6 +329,13 @@
   .line-item .li-val{color:var(--paper-dim); font-family:'IBM Plex Mono', monospace; font-size:13px; text-align:right;}
   .line-item a{color:var(--copper-light); text-decoration:none; border-bottom:1px solid transparent; transition:border-color .15s, color .15s;}
   .line-item a:hover, .line-item a:focus-visible{color:var(--paper); border-bottom-color:var(--copper-light);}
+  .resume-trigger{
+    background:none; border:none; padding:0; cursor:pointer;
+    color:var(--copper-light); font-family:'IBM Plex Mono', monospace; font-size:13px;
+    text-decoration:none; border-bottom:1px solid transparent;
+    transition:border-color .15s, color .15s;
+  }
+  .resume-trigger:hover, .resume-trigger:focus-visible{color:var(--paper); border-bottom-color:var(--copper-light);}
   .ticket-cta{margin-top:26px;}
 
   /* ---- section headers ---- */
@@ -559,6 +573,143 @@
     footer{padding-bottom:calc(80px + env(safe-area-inset-bottom));}
   }
 
+  /* ---- resume modal / sheet ---- */
+  .resume-overlay{
+    position:fixed; inset:0; z-index:70;
+    display:flex; align-items:center; justify-content:center;
+    padding:clamp(16px, 4vw, 28px);
+    opacity:0; visibility:hidden;
+    transition:opacity .35s var(--ease-out), visibility .35s;
+  }
+  .resume-overlay.is-open{opacity:1; visibility:visible;}
+  .resume-backdrop{
+    position:absolute; inset:0;
+    background:rgba(27,31,35,0.88);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:none; cursor:pointer;
+  }
+  .resume-panel{
+    position:relative; z-index:1;
+    width:100%; max-width:720px; max-height:min(90vh, 880px);
+    background:var(--charcoal-2); border:1px solid var(--line);
+    border-radius:4px; display:flex; flex-direction:column;
+    overflow:hidden;
+    transform:scale(0.96) translateY(12px);
+    transition:transform .4s var(--ease-out);
+    box-shadow:0 24px 80px rgba(0,0,0,0.5);
+  }
+  .resume-overlay.is-open .resume-panel{transform:scale(1) translateY(0);}
+  .resume-panel::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:5px; z-index:2;
+    background:repeating-linear-gradient(90deg, transparent 0 6px, var(--charcoal) 6px 8px);
+  }
+  .resume-handle{display:none;}
+  .resume-top{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+    padding:22px 24px 16px; border-bottom:1px dashed var(--line); flex-shrink:0;
+  }
+  .resume-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    color:var(--copper-light); letter-spacing:0.1em; text-transform:uppercase;
+  }
+  .resume-top h2{
+    font-family:'IBM Plex Mono', monospace; font-size:clamp(20px, 4vw, 26px);
+    margin-top:6px; line-height:1.15;
+  }
+  .resume-subtitle{font-size:14px; color:var(--paper-dim); margin-top:6px;}
+  .resume-close{
+    flex-shrink:0; width:40px; height:40px;
+    background:var(--charcoal); border:1px solid var(--line); border-radius:4px;
+    color:var(--paper-dim); font-family:'IBM Plex Mono', monospace; font-size:18px;
+    cursor:pointer; line-height:1;
+    transition:border-color .2s, color .2s, background .2s;
+  }
+  .resume-close:hover, .resume-close:focus-visible{
+    border-color:var(--copper-light); color:var(--paper);
+  }
+  .resume-scroll{
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:20px 24px 8px; flex:1;
+  }
+  .resume-section{margin-bottom:22px; padding-bottom:20px; border-bottom:1px solid var(--line);}
+  .resume-section:last-child{border-bottom:none; margin-bottom:0; padding-bottom:0;}
+  .resume-section h3{
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    color:var(--copper-light); letter-spacing:0.1em; text-transform:uppercase;
+    margin-bottom:12px;
+  }
+  .resume-section p, .resume-section li{font-size:14.5px; color:var(--paper-dim);}
+  .resume-section p + p{margin-top:10px;}
+  .resume-section ul{padding-left:18px; margin-top:8px;}
+  .resume-section li{margin-bottom:6px;}
+  .resume-project{margin-top:14px;}
+  .resume-project:first-of-type{margin-top:0;}
+  .resume-project h4{
+    font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--paper);
+    margin-bottom:4px;
+  }
+  .resume-project .proj-url{
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    color:var(--copper-light); text-decoration:none;
+  }
+  .resume-project .proj-url:hover{text-decoration:underline;}
+  .resume-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+  .resume-tags span{
+    font-family:'IBM Plex Mono', monospace; font-size:10px;
+    color:var(--slate); border:1px solid var(--slate);
+    padding:3px 8px; border-radius:3px;
+  }
+  .resume-edu{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--paper-dim);}
+  .resume-edu + .resume-edu{margin-top:8px;}
+  .resume-edu .school{color:var(--copper-light);}
+  .resume-actions{
+    display:flex; gap:10px; flex-wrap:wrap;
+    padding:16px 24px calc(16px + env(safe-area-inset-bottom));
+    border-top:1px dashed var(--line); flex-shrink:0;
+    background:var(--charcoal-2);
+  }
+  .resume-actions .btn{flex:1; min-width:140px;}
+
+  @media(max-width:767px){
+    .resume-overlay{
+      align-items:flex-end; padding:0;
+    }
+    .resume-panel{
+      max-width:none; max-height:92vh;
+      border-radius:12px 12px 0 0;
+      border-bottom:none;
+      transform:translateY(100%);
+    }
+    .resume-overlay.is-open .resume-panel{transform:translateY(0);}
+    .resume-handle{
+      display:block; width:40px; height:4px; border-radius:2px;
+      background:var(--line); margin:10px auto 0; flex-shrink:0;
+    }
+    .resume-top{padding-top:8px;}
+  }
+
+  body.resume-open .mobile-cta{transform:translateY(100%); pointer-events:none;}
+
+  @media print{
+    body.resume-open{overflow:visible;}
+    .skip-link, header, main, footer, .mobile-cta, #scroll-progress{display:none !important;}
+    .resume-overlay{
+      position:static; opacity:1; visibility:visible;
+      display:block; padding:0;
+    }
+    .resume-backdrop, .resume-close, .resume-handle, .resume-actions{display:none !important;}
+    .resume-panel{
+      transform:none !important; max-height:none !important;
+      box-shadow:none; border:none; width:100% !important;
+    }
+    .resume-scroll{overflow:visible; padding:0;}
+    body{background:#fff;}
+    .resume-panel, .resume-section h3, .resume-top h2{color:#111;}
+    .resume-section p, .resume-section li, .resume-subtitle, .resume-edu{color:#333;}
+    .resume-project h4{color:#111;}
+    .resume-tags span{border-color:#999; color:#555;}
+  }
+
   /* ---- reduced motion ---- */
   @media(prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
@@ -569,8 +720,10 @@
     .device-frame, .project:hover .device-frame, .contact-card:hover{transform:none;}
     .btn-primary::after{display:none;}
     .mobile-cta{transform:none; pointer-events:auto;}
-    .mobile-nav a{transform:none; opacity:1; transition:none;}
+    .mobile-nav a, .mobile-nav button.nav-audience{transform:none; opacity:1; transition:none;}
     .mobile-nav .nav-divider{transform:none; opacity:1;}
+    .resume-panel{transform:none !important;}
+    .resume-overlay{transition:none;}
   }
 </style>
 </head>
@@ -601,6 +754,7 @@
   <a href="#contact" data-nav="contact">Contact</a>
   <div class="nav-divider" aria-hidden="true"></div>
   <a href="#employers" class="nav-audience">For Employers</a>
+  <button type="button" class="nav-audience resume-trigger" data-resume-open>View resume</button>
   <a href="#businesses" class="nav-audience">For Businesses</a>
 </nav>
 
@@ -635,7 +789,7 @@
         <div class="ticket-body">
           <p>Looking for a full-stack developer who ships. Two production apps, built solo, are the proof.</p>
           <div class="line-items">
-            <div class="line-item"><span class="li-label">Resume</span><span class="li-val"><a href="resume.png" target="_blank" rel="noopener">View resume ↗</a></span></div>
+            <div class="line-item"><span class="li-label">Resume</span><span class="li-val"><button type="button" class="resume-trigger" data-resume-open>View resume</button></span></div>
             <div class="line-item"><span class="li-label">Stack</span><span class="li-val">React · Next.js · Supabase</span></div>
             <div class="line-item"><span class="li-label">Availability</span><span class="li-val">Immediate</span></div>
           </div>
@@ -899,6 +1053,73 @@
   <a href="mailto:keymacro.dev@gmail.com" class="btn btn-primary">Email Ray →</a>
 </div>
 
+<div class="resume-overlay" id="resume-overlay" hidden aria-hidden="true">
+  <button type="button" class="resume-backdrop" id="resume-backdrop" aria-label="Close resume"></button>
+  <div class="resume-panel" id="resume-panel" role="dialog" aria-modal="true" aria-labelledby="resume-title">
+    <div class="resume-handle" aria-hidden="true"></div>
+    <div class="resume-top">
+      <div>
+        <div class="resume-tag">Resume — Ticket 01</div>
+        <h2 id="resume-title">Ray Burgos</h2>
+        <p class="resume-subtitle">Self-Taught Full-Stack Developer · Cartersville, GA<br>
+        keymacro.dev@gmail.com · +1 561 591 2433 <span class="mono" style="color:var(--copper-light);font-size:11px;">(text only)</span></p>
+      </div>
+      <button type="button" class="resume-close" id="resume-close" aria-label="Close resume">×</button>
+    </div>
+    <div class="resume-scroll">
+      <div class="resume-section">
+        <h3>Summary</h3>
+        <p>Self-taught full-stack developer who designed, built, and shipped two production SaaS platforms solo — architecture through app store submission. Thirty years in high-volume kitchen leadership before that, which is where the discipline to actually finish and ship comes from.</p>
+      </div>
+      <div class="resume-section">
+        <h3>Projects</h3>
+        <div class="resume-project">
+          <h4>KeyMacro.fit — AI nutrition &amp; training platform</h4>
+          <a class="proj-url" href="https://www.keymacro.fit/" target="_blank" rel="noopener">keymacro.fit</a>
+          <ul>
+            <li>React/TypeScript PWA + Capacitor iOS/Android on Supabase — solo build</li>
+            <li>189+ components, 19 custom hooks, 12 Deno Edge Functions, 30+ Postgres migrations</li>
+            <li>OpenAI routed server-side — meal planning, computer-vision food logging, AI coaching</li>
+            <li>Unified Stripe + RevenueCat billing; WidgetKit, HealthKit, biometric app lock</li>
+          </ul>
+        </div>
+        <div class="resume-project">
+          <h4>SlidePress — AI social media content platform</h4>
+          <a class="proj-url" href="https://www.slidepress.co" target="_blank" rel="noopener">slidepress.co</a>
+          <ul>
+            <li>Next.js 16 + React 19 + Supabase, native iOS/Android via Capacitor</li>
+            <li>Gemini, Fal.ai, and ElevenLabs for content, image, and voice generation</li>
+            <li>OAuth publishing to YouTube, TikTok, and Instagram</li>
+            <li>Stripe + RevenueCat, webhook-driven entitlements, App Store &amp; Google Play deployment</li>
+          </ul>
+        </div>
+      </div>
+      <div class="resume-section">
+        <h3>Technical Skills</h3>
+        <div class="resume-tags">
+          <span>React</span><span>TypeScript</span><span>Next.js</span><span>Node.js</span>
+          <span>Supabase</span><span>PostgreSQL</span><span>Capacitor</span><span>Vercel</span>
+          <span>GitHub Actions</span><span>OpenAI</span><span>Gemini</span><span>Stripe</span>
+          <span>RevenueCat</span><span>OAuth</span><span>REST APIs</span><span>SEO</span>
+        </div>
+      </div>
+      <div class="resume-section">
+        <h3>Leadership</h3>
+        <p>30+ years leading teams of 6–10 in high-volume, high-pressure hospitality and kitchen management — vendor negotiation, cost control, process optimization, training, and mentoring under real nightly deadlines.</p>
+      </div>
+      <div class="resume-section">
+        <h3>Education</h3>
+        <p class="resume-edu">A.A., Media &amp; Web Design — <span class="school">Full Sail University</span></p>
+        <p class="resume-edu">Computer Science — <span class="school">Florida Atlantic University</span></p>
+      </div>
+    </div>
+    <div class="resume-actions">
+      <a href="mailto:keymacro.dev@gmail.com" class="btn btn-primary">Email Ray</a>
+      <button type="button" class="btn btn-ghost" id="resume-print">Print</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   Ray Burgos · Cartersville, GA · © <span id="year"></span>
 </footer>
@@ -995,8 +1216,48 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') closeMenu();
+    if (e.key === 'Escape') {
+      if (resumeOverlay && resumeOverlay.classList.contains('is-open')) closeResume();
+      else if (toggle.getAttribute('aria-expanded') === 'true') closeMenu();
+    }
   });
+
+  /* resume modal / sheet */
+  var resumeOverlay = document.getElementById('resume-overlay');
+  var resumeClose = document.getElementById('resume-close');
+  var resumeBackdrop = document.getElementById('resume-backdrop');
+  var resumePrint = document.getElementById('resume-print');
+  var resumeTriggers = document.querySelectorAll('[data-resume-open]');
+  var lastResumeTrigger = null;
+
+  function openResume(trigger) {
+    lastResumeTrigger = trigger || null;
+    resumeOverlay.hidden = false;
+    resumeOverlay.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(function () {
+      resumeOverlay.classList.add('is-open');
+    });
+    document.body.classList.add('resume-open');
+    if (mobileNav.classList.contains('is-open')) closeMenu();
+    resumeClose.focus();
+  }
+
+  function closeResume() {
+    resumeOverlay.classList.remove('is-open');
+    resumeOverlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('resume-open');
+    setTimeout(function () { resumeOverlay.hidden = true; }, reduced ? 0 : 350);
+    if (lastResumeTrigger) lastResumeTrigger.focus();
+  }
+
+  resumeTriggers.forEach(function (btn) {
+    btn.addEventListener('click', function () { openResume(btn); });
+  });
+  resumeClose.addEventListener('click', closeResume);
+  resumeBackdrop.addEventListener('click', closeResume);
+  if (resumePrint) {
+    resumePrint.addEventListener('click', function () { window.print(); });
+  }
 
   /* mobile sticky CTA */
   var mobileCta = document.getElementById('mobile-cta');
