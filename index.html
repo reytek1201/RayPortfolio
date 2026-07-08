@@ -216,12 +216,28 @@
   .btn:hover{transform:translateY(-2px);}
   .btn:active{transform:translateY(0) scale(0.98);}
   .btn-primary{
+    position:relative; overflow:hidden;
     background:var(--copper); color:var(--charcoal);
     box-shadow:0 1px 0 rgba(255,255,255,0.1) inset;
   }
+  .btn-primary::after{
+    content:""; position:absolute; top:0; left:-120%; width:80%; height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    transform:skewX(-18deg); transition:left .55s var(--ease-out);
+  }
   .btn-primary:hover{background:var(--copper-light); box-shadow:0 4px 20px rgba(193,101,47,0.25);}
-  .btn-ghost{border-color:var(--line); color:var(--paper);}
-  .btn-ghost:hover{border-color:var(--copper-light); color:var(--paper);}
+  .btn-primary:hover::after{left:140%;}
+  .btn-ghost{
+    color:var(--paper); border:1px solid var(--line);
+    background:linear-gradient(var(--charcoal), var(--charcoal)) padding-box,
+               linear-gradient(90deg, var(--line), var(--line)) border-box;
+    border:1px solid transparent;
+  }
+  .btn-ghost:hover{
+    background:linear-gradient(var(--charcoal), var(--charcoal)) padding-box,
+               linear-gradient(90deg, var(--copper), var(--copper-light)) border-box;
+    color:var(--paper);
+  }
   .btn-block{width:100%;}
 
   /* ---- reveal animations ---- */
@@ -261,6 +277,10 @@
     position:relative; overflow:hidden;
     transition:transform .35s var(--ease-out), border-color .35s, box-shadow .35s;
   }
+  .ticket::after{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:0.04;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
   .ticket:hover{
     transform:translateY(-4px);
     border-color:rgba(193,101,47,0.35);
@@ -285,8 +305,10 @@
     padding:10px 0; border-bottom:1px solid var(--line);
     font-size:14.5px;
     opacity:0; transform:translateX(-8px);
-    transition:opacity .4s var(--ease-out), transform .4s var(--ease-out);
+    transition:opacity .4s var(--ease-out), transform .4s var(--ease-out), padding-left .2s;
   }
+  .line-item:hover{padding-left:4px;}
+  .line-item:hover .li-val{color:var(--copper-light);}
   .ticket.is-visible .line-item{opacity:1; transform:translateX(0);}
   .ticket.is-visible .line-item:nth-child(1){transition-delay:.15s;}
   .ticket.is-visible .line-item:nth-child(2){transition-delay:.25s;}
@@ -375,12 +397,62 @@
   }
   .chip:hover{border-color:var(--copper-light); color:var(--copper-light);}
 
+  /* ---- skills ---- */
+  .skills{
+    padding:clamp(48px, 8vw, 72px) 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:rgba(34,39,44,0.5);
+  }
+  .skills-head{
+    text-align:center; margin-bottom:clamp(28px, 5vw, 36px);
+  }
+  .skills-head h2{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(18px, 3vw, 22px); margin-top:10px;
+  }
+  .skills-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(16px, 3vw, 24px);
+  }
+  @media(max-width:767px){ .skills-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:519px){ .skills-grid{grid-template-columns:1fr;} }
+  .skill-group{
+    border:1px solid var(--line); border-radius:4px;
+    padding:clamp(16px, 3vw, 20px); background:var(--charcoal-2);
+    transition:border-color .25s, transform .25s var(--ease-out);
+  }
+  .skill-group:hover{border-color:rgba(193,101,47,0.3); transform:translateY(-2px);}
+  .skill-group h4{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    color:var(--copper-light); letter-spacing:0.1em; text-transform:uppercase;
+    margin-bottom:12px;
+  }
+  .skill-tags{display:flex; flex-wrap:wrap; gap:7px;}
+  .skill-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    color:var(--paper-dim); border:1px solid var(--line);
+    padding:4px 9px; border-radius:3px;
+    transition:border-color .2s, color .2s;
+  }
+  .skill-group:hover .skill-tag{border-color:rgba(74,102,112,0.6);}
+  .skill-tag:hover{color:var(--copper-light); border-color:var(--copper-light);}
+
   /* ---- services ---- */
   .services-grid{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(14px, 3vw, 20px);
+    display:grid; grid-template-columns:repeat(6, 1fr); gap:clamp(14px, 3vw, 20px);
   }
-  @media(max-width:1023px){ .services-grid{grid-template-columns:1fr 1fr;} }
-  @media(max-width:519px){ .services-grid{grid-template-columns:1fr;} }
+  .service:nth-child(-n+3){grid-column:span 2;}
+  .service:nth-child(4){grid-column:2 / span 2;}
+  .service:nth-child(5){grid-column:4 / span 2;}
+  @media(max-width:1023px){
+    .services-grid{grid-template-columns:1fr 1fr;}
+    .service:nth-child(-n+5){grid-column:auto;}
+    .service:nth-child(5){grid-column:1 / -1; max-width:400px; justify-self:center; width:100%;}
+  }
+  @media(max-width:519px){
+    .services-grid{grid-template-columns:1fr;}
+    .service:nth-child(5){max-width:none;}
+  }
 
   .service{
     border:1px solid var(--line); border-radius:4px;
@@ -453,12 +525,34 @@
   }
   .contact-card .label{font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:600;}
   .contact-card .sub{font-size:13px; color:var(--paper-dim); margin-top:2px;}
+  .contact-phone{
+    padding:16px 20px; min-height:56px;
+    border:1px solid var(--line); border-radius:4px;
+    background:var(--charcoal);
+    font-family:'IBM Plex Mono', monospace; font-size:14px;
+    color:var(--paper-dim);
+  }
+
+  .mobile-cta{
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:45;
+    padding:12px clamp(20px, 5vw, 28px) calc(12px + env(safe-area-inset-bottom));
+    background:linear-gradient(transparent, rgba(27,31,35,0.95) 30%);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    transform:translateY(100%); transition:transform .35s var(--ease-out);
+    pointer-events:none;
+  }
+  .mobile-cta.is-visible{transform:translateY(0); pointer-events:auto;}
+  .mobile-cta .btn{width:100%;}
+  @media(max-width:767px){ .mobile-cta{display:block;} }
 
   footer{
     padding:clamp(24px, 4vw, 32px) 0;
     text-align:center; color:var(--paper-dim);
     font-family:'IBM Plex Mono', monospace; font-size:13px;
     border-top:1px solid var(--line);
+  }
+  @media(max-width:767px){
+    footer{padding-bottom:calc(80px + env(safe-area-inset-bottom));}
   }
 
   /* ---- reduced motion ---- */
@@ -467,8 +561,10 @@
     .reveal, .line-item{opacity:1; transform:none; transition:none;}
     .hero-in .eyebrow, .hero-in h1, .hero-in .lede, .hero-in .hero-actions{animation:none;}
     .eyebrow::before{width:26px; animation:none;}
-    .btn:hover, .ticket:hover, .service:hover, .device-frame, .project:hover .device-frame,
-    .contact-card:hover{transform:none;}
+    .btn:hover, .btn-primary::after, .ticket:hover, .service:hover, .skill-group:hover,
+    .device-frame, .project:hover .device-frame, .contact-card:hover{transform:none;}
+    .btn-primary::after{display:none;}
+    .mobile-cta{transform:none; pointer-events:auto;}
     .mobile-nav a{transform:none; opacity:1; transition:none;}
     .mobile-nav .nav-divider{transform:none; opacity:1;}
   }
@@ -638,6 +734,59 @@
   </div>
 </section>
 
+<section id="skills" class="skills">
+  <div class="wrap">
+    <div class="skills-head reveal">
+      <div class="sec-tag">Technical Stack</div>
+      <h2>What I build with</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group reveal" data-delay="1">
+        <h4>Frontend</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">React</span><span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Next.js</span><span class="skill-tag">Node.js</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" data-delay="2">
+        <h4>Backend</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Supabase</span><span class="skill-tag">PostgreSQL</span>
+          <span class="skill-tag">Auth &amp; RLS</span><span class="skill-tag">Edge Functions</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" data-delay="3">
+        <h4>Mobile</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Capacitor</span><span class="skill-tag">HealthKit</span>
+          <span class="skill-tag">WidgetKit</span><span class="skill-tag">App Store</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" data-delay="1">
+        <h4>DevOps</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Vercel</span><span class="skill-tag">GitHub Actions</span>
+          <span class="skill-tag">REST APIs</span><span class="skill-tag">OAuth</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" data-delay="2">
+        <h4>AI &amp; APIs</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">OpenAI</span><span class="skill-tag">Gemini</span>
+          <span class="skill-tag">Fal.ai</span><span class="skill-tag">ElevenLabs</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" data-delay="3">
+        <h4>Billing</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Stripe</span><span class="skill-tag">RevenueCat</span>
+          <span class="skill-tag">Webhooks</span><span class="skill-tag">SEO / JSON-LD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="services">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -714,26 +863,24 @@
         <p>Employer or business owner — reach out directly, I respond fast.</p>
       </div>
       <div class="contact-actions">
-        <a class="contact-card" href="mailto:reytek1201@gmail.com">
+        <a class="contact-card" href="mailto:keymacro.dev@gmail.com">
           <span class="icon">EMAIL</span>
           <div>
-            <div class="label">reytek1201@gmail.com</div>
+            <div class="label">keymacro.dev@gmail.com</div>
             <div class="sub">Best for project details</div>
           </div>
         </a>
-        <a class="contact-card" href="tel:+15615912433">
-          <span class="icon">CALL</span>
-          <div>
-            <div class="label">+1 561 591 2433</div>
-            <div class="sub">Cartersville, GA</div>
-          </div>
-        </a>
+        <div class="contact-phone">+1 561 591 2433</div>
       </div>
     </div>
   </div>
 </section>
 
 </main>
+
+<div class="mobile-cta" id="mobile-cta" aria-hidden="true">
+  <a href="mailto:keymacro.dev@gmail.com" class="btn btn-primary">Email Ray →</a>
+</div>
 
 <footer>
   Ray Burgos · Cartersville, GA · © <span id="year"></span>
@@ -833,6 +980,22 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') closeMenu();
   });
+
+  /* mobile sticky CTA */
+  var mobileCta = document.getElementById('mobile-cta');
+  var contactSec = document.getElementById('contact');
+  var heroSec = document.querySelector('.hero');
+  function updateMobileCta() {
+    if (!mobileCta || window.innerWidth > 767) return;
+    var pastHero = window.scrollY > (heroSec ? heroSec.offsetHeight * 0.6 : 300);
+    var nearContact = contactSec && window.scrollY > contactSec.offsetTop - window.innerHeight + 120;
+    var show = pastHero && !nearContact;
+    mobileCta.classList.toggle('is-visible', show);
+    mobileCta.setAttribute('aria-hidden', show ? 'false' : 'true');
+  }
+  window.addEventListener('scroll', updateMobileCta, { passive: true });
+  window.addEventListener('resize', updateMobileCta, { passive: true });
+  updateMobileCta();
 })();
 </script>
 
