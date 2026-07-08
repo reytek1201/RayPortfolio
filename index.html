@@ -480,8 +480,9 @@
     margin-top:clamp(32px, 5vw, 40px); padding-top:24px;
     border-top:1px dashed var(--line);
     font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--paper-dim);
+    display:flex; flex-wrap:wrap; gap:8px 20px;
   }
-  .about-cred span{color:var(--copper-light);}
+  .about-cred .school{color:var(--copper-light);}
 
   /* ---- contact ---- */
   .contact-box{
@@ -861,7 +862,10 @@
         </p>
       </div>
     </div>
-    <p class="about-cred reveal">A.A., Media &amp; Web Design — <span>Full Sail University</span></p>
+    <div class="about-cred reveal">
+      <span>A.A., Media &amp; Web Design — <span class="school">Full Sail University</span></span>
+      <span>Computer Science — <span class="school">Florida Atlantic University</span></span>
+    </div>
   </div>
 </section>
 
