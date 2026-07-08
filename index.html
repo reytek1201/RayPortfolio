@@ -251,6 +251,7 @@
   .reveal[data-delay="3"]{transition-delay:.3s;}
   .reveal[data-delay="4"]{transition-delay:.4s;}
   .reveal[data-delay="5"]{transition-delay:.5s;}
+  .reveal[data-delay="6"]{transition-delay:.6s;}
 
   .hero-in .eyebrow{animation:fade-up .7s var(--ease-out) .1s both;}
   .hero-in h1{animation:fade-up .7s var(--ease-out) .25s both;}
@@ -315,6 +316,7 @@
   .ticket.is-visible .line-item:nth-child(3){transition-delay:.35s;}
   .ticket.is-visible .line-item:nth-child(4){transition-delay:.45s;}
   .ticket.is-visible .line-item:nth-child(5){transition-delay:.55s;}
+  .ticket.is-visible .line-item:nth-child(6){transition-delay:.65s;}
   .line-item:last-child{border-bottom:none;}
   .line-item .li-label{color:var(--paper);}
   .line-item .li-val{color:var(--paper-dim); font-family:'IBM Plex Mono', monospace; font-size:13px; text-align:right;}
@@ -439,20 +441,10 @@
 
   /* ---- services ---- */
   .services-grid{
-    display:grid; grid-template-columns:repeat(6, 1fr); gap:clamp(14px, 3vw, 20px);
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(14px, 3vw, 20px);
   }
-  .service:nth-child(-n+3){grid-column:span 2;}
-  .service:nth-child(4){grid-column:2 / span 2;}
-  .service:nth-child(5){grid-column:4 / span 2;}
-  @media(max-width:1023px){
-    .services-grid{grid-template-columns:1fr 1fr;}
-    .service:nth-child(-n+5){grid-column:auto;}
-    .service:nth-child(5){grid-column:1 / -1; max-width:400px; justify-self:center; width:100%;}
-  }
-  @media(max-width:519px){
-    .services-grid{grid-template-columns:1fr;}
-    .service:nth-child(5){max-width:none;}
-  }
+  @media(max-width:1023px){ .services-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:519px){ .services-grid{grid-template-columns:1fr;} }
 
   .service{
     border:1px solid var(--line); border-radius:4px;
@@ -484,6 +476,12 @@
   @media(max-width:767px){ .about-grid{grid-template-columns:1fr;} }
   .about p{color:var(--paper-dim); font-size:clamp(15px, 2vw, 16px);}
   .about p + p{margin-top:16px;}
+  .about-cred{
+    margin-top:clamp(32px, 5vw, 40px); padding-top:24px;
+    border-top:1px dashed var(--line);
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--paper-dim);
+  }
+  .about-cred span{color:var(--copper-light);}
 
   /* ---- contact ---- */
   .contact-box{
@@ -526,11 +524,16 @@
   .contact-card .label{font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:600;}
   .contact-card .sub{font-size:13px; color:var(--paper-dim); margin-top:2px;}
   .contact-phone{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
     padding:16px 20px; min-height:56px;
     border:1px solid var(--line); border-radius:4px;
     background:var(--charcoal);
     font-family:'IBM Plex Mono', monospace; font-size:14px;
     color:var(--paper-dim);
+  }
+  .contact-phone .phone-note{
+    font-size:11px; color:var(--copper-light);
+    letter-spacing:0.08em; text-transform:uppercase; flex-shrink:0;
   }
 
   .mobile-cta{
@@ -654,6 +657,7 @@
             <div class="line-item"><span class="li-label">Small web apps</span><span class="li-val">quote on request</span></div>
             <div class="line-item"><span class="li-label">iOS / Android apps</span><span class="li-val">quote on request</span></div>
             <div class="line-item"><span class="li-label">AI integration</span><span class="li-val">quote on request</span></div>
+            <div class="line-item"><span class="li-label">Automations</span><span class="li-val">quote on request</span></div>
           </div>
           <div class="ticket-cta">
             <a href="#contact" class="btn btn-primary btn-block">Request a quote</a>
@@ -819,6 +823,11 @@
         <h4>AI integration</h4>
         <p>Add AI features to your product — content generation, computer vision, or custom AI workflows using OpenAI, Gemini, and similar APIs.</p>
       </div>
+      <div class="service reveal" data-delay="6">
+        <div class="num mono">06</div>
+        <h4>Automations</h4>
+        <p>Connect the tools you already use — booking alerts, CRM sync, webhook workflows, and repetitive tasks handled without manual work.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -852,6 +861,7 @@
         </p>
       </div>
     </div>
+    <p class="about-cred reveal">A.A., Media &amp; Web Design — <span>Full Sail University</span></p>
   </div>
 </section>
 
@@ -860,7 +870,7 @@
     <div class="contact-box reveal">
       <div class="contact-copy">
         <h2>Let's talk about what you need built.</h2>
-        <p>Employer or business owner — reach out directly, I respond fast.</p>
+        <p>Email is best. Text works too — no phone calls.</p>
       </div>
       <div class="contact-actions">
         <a class="contact-card" href="mailto:keymacro.dev@gmail.com">
@@ -870,7 +880,10 @@
             <div class="sub">Best for project details</div>
           </div>
         </a>
-        <div class="contact-phone">+1 561 591 2433</div>
+        <div class="contact-phone">
+          <span>+1 561 591 2433</span>
+          <span class="phone-note">Text only</span>
+        </div>
       </div>
     </div>
   </div>
