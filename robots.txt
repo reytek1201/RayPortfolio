@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://rayburgos.dev/sitemap.xml
+Sitemap: https://www.rayburgos.com/sitemap.xml
