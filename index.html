@@ -51,7 +51,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Public+Sans:wght@400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Public+Sans:wght@400;600&display=swap"></noscript>
 <style>
   :root{
     --charcoal:#1B1F23;
@@ -209,7 +210,7 @@
     transform:translateY(12px); opacity:0; transition:opacity .3s .2s, transform .3s .2s var(--ease-out);
   }
   .mobile-nav.is-open .nav-divider{transform:translateY(0); opacity:1;}
-  .mobile-nav .nav-audience{font-size:clamp(16px, 4vw, 18px); font-weight:500;}
+  .mobile-nav .nav-audience{font-size:clamp(16px, 4vw, 18px); font-weight:600;}
 
   @media(max-width:767px){
     .nav-toggle{display:flex;}
@@ -914,7 +915,7 @@
           <div class="device-screen">
             <picture>
               <source srcset="assets/keymacro-preview.webp" type="image/webp">
-              <img src="assets/keymacro-preview.png" alt="KeyMacro.fit — AI nutrition and training platform" width="1200" height="630" loading="lazy">
+              <img src="assets/keymacro-preview.png" alt="KeyMacro.fit — AI nutrition and training platform" width="1200" height="630" loading="lazy" decoding="async">
             </picture>
           </div>
         </div>
@@ -947,7 +948,7 @@
           <div class="device-screen">
             <picture>
               <source srcset="assets/slidepress-preview.webp" type="image/webp">
-              <img src="assets/slidepress-preview.png" alt="SlidePress — AI social media content platform" width="1200" height="630" loading="lazy">
+              <img src="assets/slidepress-preview.png" alt="SlidePress — AI social media content platform" width="1200" height="630" loading="lazy" decoding="async">
             </picture>
           </div>
         </div>
@@ -978,7 +979,10 @@
             <span class="device-url">www.rayburgos.com</span>
           </div>
           <div class="device-screen">
-            <img src="assets/og-image.jpg" alt="Ray Burgos portfolio site — custom single-page site on Vercel" width="1200" height="630" loading="lazy">
+            <picture>
+              <source srcset="assets/og-image.webp" type="image/webp">
+              <img src="assets/og-image.jpg" alt="Ray Burgos portfolio site — custom single-page site on Vercel" width="1200" height="630" loading="lazy" decoding="async">
+            </picture>
           </div>
         </div>
       </div>
@@ -1448,7 +1452,14 @@
   }
 })();
 </script>
-<script defer src="/_vercel/insights/script.js"></script>
+<script>
+window.addEventListener('load', function () {
+  var s = document.createElement('script');
+  s.src = '/_vercel/insights/script.js';
+  s.defer = true;
+  document.body.appendChild(s);
+});
+</script>
 
 </body>
 </html>
