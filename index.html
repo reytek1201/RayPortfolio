@@ -469,6 +469,7 @@
     border:1px solid var(--line); border-radius:28px;
     background:var(--charcoal-2); padding:10px;
     box-shadow:0 12px 32px rgba(0,0,0,0.35);
+    transition:transform .3s var(--ease-smooth);
   }
   .shot-showcase--slidepress .phone-shell{
     border-color:rgba(193,101,47,0.35);
@@ -481,6 +482,36 @@
   .phone-screen{
     position:relative; aspect-ratio:9/19; overflow:hidden;
     border-radius:20px; background:#0f1114;
+    touch-action:pan-y; cursor:grab;
+  }
+  .phone-shell.is-pulse{
+    animation:phone-pulse .35s var(--ease-smooth);
+  }
+  @keyframes phone-pulse{
+    0%, 100%{transform:scale(1);}
+    50%{transform:scale(1.015);}
+  }
+  .shot-swipe-hint{
+    display:none;
+    font-family:'IBM Plex Mono', monospace; font-size:10px;
+    letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--paper-dim);
+  }
+  .shot-swipe-hint.is-hidden{display:none !important;}
+  .shot-dots{
+    display:none; gap:8px; align-items:center; justify-content:center;
+  }
+  .shot-dot{
+    width:8px; height:8px; padding:0; border:none; border-radius:50%;
+    background:var(--line); cursor:pointer;
+    transition:background .2s, transform .2s;
+  }
+  .shot-dot.is-active{background:var(--copper-light); transform:scale(1.15);}
+  .shot-dot:focus-visible{outline:2px solid var(--copper-light); outline-offset:2px;}
+  @media(max-width:767px){
+    .shot-swipe-hint{display:block;}
+    .shot-dots{display:flex;}
+    .shot-thumb{width:56px; height:56px;}
   }
   .shot-stack{position:absolute; inset:0;}
   .shot-layer{
@@ -878,6 +909,7 @@
     .mobile-nav .nav-divider{transform:none; opacity:1;}
     .resume-panel{transform:none !important; max-height:none !important;}
     .shot-layer{transition:none;}
+    .phone-shell.is-pulse{animation:none;}
   }
 </style>
 </head>
@@ -1652,16 +1684,77 @@
   /* case study screenshot galleries */
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  function shotHapticTick() {
+    if (navigator.vibrate) navigator.vibrate(8);
+  }
+
   document.querySelectorAll('[data-shot-gallery]').forEach(function (gallery) {
     var layers = gallery.querySelectorAll('.shot-layer');
     var tabs = gallery.querySelectorAll('.shot-thumb');
-    if (!layers.length || !tabs.length) return;
+    var phoneShell = gallery.querySelector('.phone-shell');
+    var phoneScreen = gallery.querySelector('.phone-screen');
+    var thumbsContainer = gallery.querySelector('.shot-thumbs');
+    if (!layers.length || !tabs.length || !phoneScreen) return;
+
+    var dotsWrap = document.createElement('div');
+    dotsWrap.className = 'shot-dots';
+    dotsWrap.setAttribute('role', 'tablist');
+    dotsWrap.setAttribute('aria-label', (thumbsContainer.getAttribute('aria-label') || 'Screenshots') + ' pagination');
+    var dots = [];
+
+    layers.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'shot-dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', 'Screenshot ' + (i + 1) + ' of ' + layers.length);
+      dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+      dotsWrap.appendChild(dot);
+      dots.push(dot);
+    });
+
+    var hint = document.createElement('span');
+    hint.className = 'shot-swipe-hint';
+    hint.textContent = 'Swipe to browse';
+
+    if (phoneShell && phoneShell.nextSibling) {
+      phoneShell.parentNode.insertBefore(hint, phoneShell.nextSibling);
+    }
+    thumbsContainer.parentNode.insertBefore(dotsWrap, thumbsContainer);
+
+    try {
+      if (sessionStorage.getItem('shot-swipe-hint-seen')) hint.classList.add('is-hidden');
+    } catch (err) { /* ignore */ }
 
     var current = 0;
     var timer = null;
+    var touchPaused = false;
+    var touchStart = null;
+    var touchAxis = null;
+    var SWIPE_THRESHOLD = 48;
+    var AXIS_LOCK = 12;
 
-    function setActive(index) {
+    function hideSwipeHint() {
+      hint.classList.add('is-hidden');
+      try { sessionStorage.setItem('shot-swipe-hint-seen', '1'); } catch (err) { /* ignore */ }
+    }
+
+    function pulsePhone() {
+      if (reducedMotion || !phoneShell) return;
+      phoneShell.classList.remove('is-pulse');
+      void phoneShell.offsetWidth;
+      phoneShell.classList.add('is-pulse');
+      phoneShell.addEventListener('animationend', function onEnd() {
+        phoneShell.classList.remove('is-pulse');
+        phoneShell.removeEventListener('animationend', onEnd);
+      });
+    }
+
+    function setActive(index, opts) {
+      opts = opts || {};
       if (index < 0 || index >= layers.length) return;
+      if (index === current && !opts.force) return;
+
       current = index;
       layers.forEach(function (layer, i) {
         layer.classList.toggle('is-active', i === index);
@@ -1670,25 +1763,109 @@
         var active = i === index;
         tab.classList.toggle('is-active', active);
         tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        if (active) {
+          tab.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+        }
       });
+      dots.forEach(function (dot, i) {
+        var active = i === index;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+
+      if (opts.feedback !== false) {
+        shotHapticTick();
+        pulsePhone();
+      }
+      if (opts.fromUser) {
+        hideSwipeHint();
+        restartTimer();
+      }
+    }
+
+    function next(fromUser) {
+      setActive((current + 1) % layers.length, { fromUser: !!fromUser, feedback: !!fromUser });
+    }
+
+    function prev(fromUser) {
+      setActive((current - 1 + layers.length) % layers.length, { fromUser: !!fromUser, feedback: !!fromUser });
     }
 
     tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () {
-        setActive(i);
-        restartTimer();
-      });
+      tab.addEventListener('click', function () { setActive(i, { fromUser: true }); });
     });
 
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { setActive(i, { fromUser: true }); });
+    });
+
+    function pauseTimer() {
+      touchPaused = true;
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
     function restartTimer() {
+      touchPaused = false;
       if (timer) clearInterval(timer);
       timer = null;
       if (!reducedMotion && layers.length > 1) {
         timer = setInterval(function () {
-          setActive((current + 1) % layers.length);
+          if (!touchPaused) setActive((current + 1) % layers.length, { feedback: false });
         }, 5500);
       }
     }
+
+    phoneScreen.addEventListener('touchstart', function (e) {
+      var t = e.touches[0];
+      if (!t) return;
+      touchStart = { x: t.clientX, y: t.clientY };
+      touchAxis = null;
+      pauseTimer();
+    }, { passive: true });
+
+    phoneScreen.addEventListener('touchmove', function (e) {
+      if (!touchStart) return;
+      var t = e.touches[0];
+      if (!t) return;
+      var dx = t.clientX - touchStart.x;
+      var dy = t.clientY - touchStart.y;
+      if (touchAxis === null && (Math.abs(dx) >= AXIS_LOCK || Math.abs(dy) >= AXIS_LOCK)) {
+        touchAxis = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+      }
+    }, { passive: true });
+
+    phoneScreen.addEventListener('touchend', function (e) {
+      if (!touchStart) return;
+      if (touchAxis === 'v') {
+        touchStart = null;
+        touchAxis = null;
+        restartTimer();
+        return;
+      }
+      var t = e.changedTouches[0];
+      var dx = (t ? t.clientX : touchStart.x) - touchStart.x;
+      touchStart = null;
+      touchAxis = null;
+      if (Math.abs(dx) < SWIPE_THRESHOLD) {
+        restartTimer();
+        return;
+      }
+      if (dx < 0) next(true);
+      else prev(true);
+    }, { passive: true });
+
+    phoneScreen.addEventListener('touchcancel', function () {
+      touchStart = null;
+      touchAxis = null;
+      restartTimer();
+    });
+
+    gallery.setAttribute('tabindex', '0');
+    gallery.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(true); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); next(true); }
+    });
 
     restartTimer();
   });
