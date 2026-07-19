@@ -452,6 +452,68 @@
   .device-screen{aspect-ratio:1200/630; overflow:hidden;}
   .device-screen img{width:100%; height:100%; object-fit:cover; object-position:top;}
 
+  /* case study visuals — phone gallery (apps) vs browser frame (sites) */
+  .shot-showcase{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    padding:clamp(16px, 3vw, 24px);
+    border:1px solid var(--line); border-radius:8px;
+    background:linear-gradient(165deg, var(--charcoal-2) 0%, var(--charcoal) 55%, #1a1816 100%);
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    transition:transform .3s var(--ease-smooth);
+  }
+  .project:hover .shot-showcase{transform:translate3d(0, -2px, 0);}
+  .shot-showcase-label{
+    font-family:'IBM Plex Mono', monospace; font-size:10px;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--paper-dim);
+  }
+  .shot-showcase--slidepress .shot-showcase-label{color:#e8a06a;}
+  .phone-shell{
+    width:min(100%, 240px);
+    border:1px solid var(--line); border-radius:28px;
+    background:var(--charcoal-2); padding:10px;
+    box-shadow:0 12px 32px rgba(0,0,0,0.35);
+  }
+  .shot-showcase--slidepress .phone-shell{
+    border-color:rgba(193,101,47,0.35);
+    box-shadow:0 12px 32px rgba(193,101,47,0.12);
+  }
+  .phone-notch{
+    width:72px; height:5px; margin:0 auto 8px;
+    border-radius:99px; background:var(--line);
+  }
+  .phone-screen{
+    position:relative; aspect-ratio:9/19; overflow:hidden;
+    border-radius:20px; background:#0f1114;
+  }
+  .shot-stack{position:absolute; inset:0;}
+  .shot-layer{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:top;
+    opacity:0; transition:opacity .35s var(--ease-smooth);
+  }
+  .shot-layer.is-active{opacity:1;}
+  .shot-thumbs{
+    display:flex; gap:8px; width:100%; max-width:320px;
+    overflow-x:auto; padding:2px 0 4px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+  }
+  .shot-thumbs::-webkit-scrollbar{height:4px;}
+  .shot-thumbs::-webkit-scrollbar-thumb{background:var(--line); border-radius:2px;}
+  .shot-thumb{
+    flex:0 0 auto; scroll-snap-align:start;
+    width:52px; height:52px; padding:0; border:2px solid var(--line);
+    border-radius:8px; overflow:hidden; cursor:pointer;
+    background:var(--charcoal); transition:border-color .2s, box-shadow .2s;
+  }
+  .shot-thumb img{width:100%; height:100%; object-fit:cover; object-position:top;}
+  .shot-thumb.is-active{
+    border-color:var(--copper-light);
+    box-shadow:0 0 0 1px rgba(193,101,47,0.35);
+  }
+  .shot-thumb:hover{border-color:var(--slate);}
+  .shot-thumb:focus-visible{outline:2px solid var(--copper-light); outline-offset:2px;}
+
   .project-meta{
     font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--paper-dim);
     letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px;
@@ -804,12 +866,14 @@
     .eyebrow::before{width:26px; animation:none;}
     .btn:hover, .btn-primary::after, .ticket:hover, .service:hover, .skill-group:hover,
     .device-frame, .project:hover .device-frame, .contact-card:hover,
+    .shot-showcase, .project:hover .shot-showcase,
     .social-link:hover{transform:none;}
     .btn-primary::after{display:none;}
     .mobile-cta{transform:none; pointer-events:auto;}
     .mobile-nav a, .mobile-nav button.nav-audience{transform:none; opacity:1; transition:none;}
     .mobile-nav .nav-divider{transform:none; opacity:1;}
     .resume-panel{transform:none !important; max-height:none !important;}
+    .shot-layer{transition:none;}
   }
 </style>
 </head>
@@ -923,16 +987,26 @@
 
     <article class="project reveal">
       <div class="project-visual">
-        <div class="device-frame">
-          <div class="device-chrome">
-            <span class="device-dot"></span><span class="device-dot"></span><span class="device-dot"></span>
-            <span class="device-url">keymacro.fit</span>
+        <div class="shot-showcase shot-showcase--app" data-shot-gallery>
+          <span class="shot-showcase-label">In-app product</span>
+          <div class="phone-shell">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-screen">
+              <div class="shot-stack" aria-live="polite">
+                <img class="shot-layer is-active" src="assets/keymacro/green-zone.webp" alt="KeyMacro dashboard — Green Zone calorie ring and daily macros" width="560" height="1222" loading="eager" decoding="async">
+                <img class="shot-layer" src="assets/keymacro/smarter-snap.webp" alt="KeyMacro Smarter Snap — plate scan with detected foods and macros" width="560" height="1222" loading="lazy" decoding="async">
+                <img class="shot-layer" src="assets/keymacro/coach-key.webp" alt="KeyMacro Coach Key — AI nutrition coaching chat" width="560" height="1222" loading="lazy" decoding="async">
+                <img class="shot-layer" src="assets/keymacro/workout-smartfit.webp" alt="KeyMacro Workout — SmartFit macro adjustments for training day" width="560" height="1222" loading="lazy" decoding="async">
+                <img class="shot-layer" src="assets/keymacro/consistency-score.webp" alt="KeyMacro Home — Consistency Score and daily progress" width="560" height="1222" loading="lazy" decoding="async">
+              </div>
+            </div>
           </div>
-          <div class="device-screen">
-            <picture>
-              <source srcset="assets/keymacro-preview.webp" type="image/webp">
-              <img src="assets/keymacro-preview.png" alt="KeyMacro.fit — AI nutrition and training platform" width="1200" height="630" loading="lazy" decoding="async">
-            </picture>
+          <div class="shot-thumbs" role="tablist" aria-label="KeyMacro app screenshots">
+            <button type="button" class="shot-thumb is-active" role="tab" aria-selected="true" aria-label="Green Zone dashboard"><img src="assets/keymacro/green-zone.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
+            <button type="button" class="shot-thumb" role="tab" aria-selected="false" aria-label="Smarter Snap food logging"><img src="assets/keymacro/smarter-snap.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
+            <button type="button" class="shot-thumb" role="tab" aria-selected="false" aria-label="Coach Key AI chat"><img src="assets/keymacro/coach-key.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
+            <button type="button" class="shot-thumb" role="tab" aria-selected="false" aria-label="Workout SmartFit"><img src="assets/keymacro/workout-smartfit.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
+            <button type="button" class="shot-thumb" role="tab" aria-selected="false" aria-label="Consistency Score"><img src="assets/keymacro/consistency-score.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
           </div>
         </div>
       </div>
@@ -951,16 +1025,24 @@
 
     <article class="project reveal" data-delay="1">
       <div class="project-visual">
-        <div class="device-frame">
-          <div class="device-chrome">
-            <span class="device-dot"></span><span class="device-dot"></span><span class="device-dot"></span>
-            <span class="device-url">slidepress.co</span>
+        <div class="shot-showcase shot-showcase--app shot-showcase--slidepress" data-shot-gallery>
+          <span class="shot-showcase-label">Campaign workspace</span>
+          <div class="phone-shell">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-screen">
+              <div class="shot-stack" aria-live="polite">
+                <img class="shot-layer is-active" src="assets/slidepress/feature-slides.webp" alt="SlidePress — carousel slide editor with AI voiceover" width="560" height="1222" loading="eager" decoding="async">
+                <img class="shot-layer" src="assets/slidepress/feature-topic.webp" alt="SlidePress — AI topic and content generation" width="560" height="1222" loading="lazy" decoding="async">
+                <img class="shot-layer" src="assets/slidepress/feature-export.webp" alt="SlidePress — export carousel and video" width="560" height="1222" loading="lazy" decoding="async">
+                <img class="shot-layer" src="assets/slidepress/feature-publish.webp" alt="SlidePress — publish to YouTube, TikTok, and Instagram" width="560" height="1222" loading="lazy" decoding="async">
+              </div>
+            </div>
           </div>
-          <div class="device-screen">
-            <picture>
-              <source srcset="assets/slidepress-preview.webp" type="image/webp">
-              <img src="assets/slidepress-preview.png" alt="SlidePress — AI social media content platform" width="1200" height="630" loading="lazy" decoding="async">
-            </picture>
+          <div class="shot-thumbs" role="tablist" aria-label="SlidePress app screenshots">
+            <button type="button" class="shot-thumb is-active" role="tab" aria-selected="true" aria-label="Slide editor"><img src="assets/slidepress/feature-slides.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
+            <button type="button" class="shot-thumb" role="tab" aria-selected="false" aria-label="Topic generation"><img src="assets/slidepress/feature-topic.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
+            <button type="button" class="shot-thumb" role="tab" aria-selected="false" aria-label="Export"><img src="assets/slidepress/feature-export.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
+            <button type="button" class="shot-thumb" role="tab" aria-selected="false" aria-label="Publish"><img src="assets/slidepress/feature-publish.webp" alt="" width="52" height="52" loading="lazy" decoding="async"></button>
           </div>
         </div>
       </div>
@@ -1544,6 +1626,50 @@
   if (resumePrint) {
     resumePrint.addEventListener('click', function () { window.print(); });
   }
+
+  /* case study screenshot galleries */
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('[data-shot-gallery]').forEach(function (gallery) {
+    var layers = gallery.querySelectorAll('.shot-layer');
+    var tabs = gallery.querySelectorAll('.shot-thumb');
+    if (!layers.length || !tabs.length) return;
+
+    var current = 0;
+    var timer = null;
+
+    function setActive(index) {
+      if (index < 0 || index >= layers.length) return;
+      current = index;
+      layers.forEach(function (layer, i) {
+        layer.classList.toggle('is-active', i === index);
+      });
+      tabs.forEach(function (tab, i) {
+        var active = i === index;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () {
+        setActive(i);
+        restartTimer();
+      });
+    });
+
+    function restartTimer() {
+      if (timer) clearInterval(timer);
+      timer = null;
+      if (!reducedMotion && layers.length > 1) {
+        timer = setInterval(function () {
+          setActive((current + 1) % layers.length);
+        }, 5500);
+      }
+    }
+
+    restartTimer();
+  });
 })();
 </script>
 <script>
