@@ -1744,8 +1744,15 @@
         var active = i === index;
         tab.classList.toggle('is-active', active);
         tab.setAttribute('aria-selected', active ? 'true' : 'false');
-        if (active) {
-          tab.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+        if (active && opts.fromUser && thumbsContainer) {
+          var tabLeft = tab.offsetLeft;
+          var tabWidth = tab.offsetWidth;
+          var maxScroll = thumbsContainer.scrollWidth - thumbsContainer.clientWidth;
+          var target = tabLeft - (thumbsContainer.clientWidth - tabWidth) / 2;
+          thumbsContainer.scrollTo({
+            left: Math.max(0, Math.min(target, maxScroll)),
+            behavior: reducedMotion ? 'auto' : 'smooth'
+          });
         }
       });
       dots.forEach(function (dot, i) {
