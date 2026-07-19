@@ -484,13 +484,6 @@
     border-radius:20px; background:#0f1114;
     touch-action:pan-y; cursor:grab;
   }
-  .phone-shell.is-pulse{
-    animation:phone-pulse .35s var(--ease-smooth);
-  }
-  @keyframes phone-pulse{
-    0%, 100%{transform:scale(1);}
-    50%{transform:scale(1.015);}
-  }
   .shot-swipe-hint{
     display:none;
     font-family:'IBM Plex Mono', monospace; font-size:10px;
@@ -909,7 +902,6 @@
     .mobile-nav .nav-divider{transform:none; opacity:1;}
     .resume-panel{transform:none !important; max-height:none !important;}
     .shot-layer{transition:none;}
-    .phone-shell.is-pulse{animation:none;}
   }
 </style>
 </head>
@@ -1739,17 +1731,6 @@
       try { sessionStorage.setItem('shot-swipe-hint-seen', '1'); } catch (err) { /* ignore */ }
     }
 
-    function pulsePhone() {
-      if (reducedMotion || !phoneShell) return;
-      phoneShell.classList.remove('is-pulse');
-      void phoneShell.offsetWidth;
-      phoneShell.classList.add('is-pulse');
-      phoneShell.addEventListener('animationend', function onEnd() {
-        phoneShell.classList.remove('is-pulse');
-        phoneShell.removeEventListener('animationend', onEnd);
-      });
-    }
-
     function setActive(index, opts) {
       opts = opts || {};
       if (index < 0 || index >= layers.length) return;
@@ -1775,7 +1756,6 @@
 
       if (opts.feedback !== false) {
         shotHapticTick();
-        pulsePhone();
       }
       if (opts.fromUser) {
         hideSwipeHint();
