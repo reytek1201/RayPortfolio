@@ -778,8 +778,9 @@
   @media print{
     body.resume-open{overflow:visible;}
     .skip-link, header, main, footer, .mobile-cta, #scroll-progress{display:none !important;}
-    .resume-dialog{
-      position:static; display:block; padding:0;
+    .resume-dialog:not(#resume-dialog){display:none !important;}
+    #resume-dialog{
+      position:static; display:block !important; padding:0;
     }
     .resume-dialog::backdrop{display:none;}
     .resume-close, .resume-handle, .resume-actions{display:none !important;}
