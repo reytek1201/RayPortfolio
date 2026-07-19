@@ -457,8 +457,13 @@
     letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px;
   }
   .project h3{font-size:clamp(18px, 3vw, 21px); margin-bottom:12px; line-height:1.3;}
-  .project ul{padding-left:18px; color:var(--paper-dim); font-size:clamp(14px, 2vw, 15px);}
-  .project li{margin-bottom:8px;}
+  .project-lede{color:var(--paper-dim); font-size:clamp(14px, 2vw, 15px); line-height:1.55; margin:0 0 14px;}
+  .project-details-trigger{
+    display:inline-block; margin:0 0 16px;
+    font-size:13px;
+  }
+  .case-study-list{padding-left:18px; color:var(--paper-dim); font-size:clamp(14px, 2vw, 15px);}
+  .case-study-list li{margin-bottom:10px;}
   .project-link{
     display:inline-flex; align-items:center; gap:6px; margin-top:14px;
     font-family:'IBM Plex Mono', monospace; font-size:13px;
@@ -933,13 +938,8 @@
       <div class="project-content">
         <div class="project-meta">KeyMacro.fit</div>
         <h3>AI-powered nutrition &amp; training platform</h3>
-        <ul>
-          <li>Solo-built cross-platform app — React/TypeScript PWA + Capacitor iOS/Android on Supabase — 189+ components, 19 custom hooks, 12 Deno Edge Functions, 30+ Postgres migrations</li>
-          <li>Hybrid AI architecture (OpenAI) routed server-side — zero client-exposed API keys — meal planning, computer-vision food logging, and AI coaching with persistent memory</li>
-          <li>Unified Stripe (web) + RevenueCat (iOS/Android IAP) subscription system with database-level privilege guards</li>
-          <li>Native integrations: iOS WidgetKit + Android home-screen widgets, HealthKit/Health Connect sync, Face ID/biometric app lock</li>
-          <li>Production app scores 98 (Performance), 100 (Accessibility, Best Practices, SEO) on Lighthouse mobile audit</li>
-        </ul>
+        <p class="project-lede">An AI nutrition and training partner that turns your goals into a personalized meal plan, logs meals from a photo, and coaches you through the day — designed and built solo, from database to App Store.</p>
+        <button type="button" class="resume-trigger project-details-trigger" data-sheet-open="case-study-keymacro">See full details →</button>
         <a class="project-link" href="https://www.keymacro.fit/" target="_blank" rel="noopener">Visit keymacro.fit ↗</a>
         <div class="stack">
           <span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Supabase</span>
@@ -966,13 +966,8 @@
       <div class="project-content">
         <div class="project-meta">SlidePress</div>
         <h3>AI-powered social media content platform</h3>
-        <ul>
-          <li>Full-stack web app (Next.js 16, React 19, Supabase) with native iOS/Android apps via Capacitor</li>
-          <li>Integrated Google Gemini, Fal.ai, and ElevenLabs for content, image, and voice generation</li>
-          <li>Built OAuth publishing integrations with YouTube, TikTok, and Instagram, navigating each platform's formal developer review process</li>
-          <li>Stripe + RevenueCat billing, webhook-driven entitlements, usage metering; submitted through App Store Connect and Google Play Console</li>
-          <li>Production app scores 100 across Performance, Accessibility, Best Practices, and SEO on Lighthouse desktop audit</li>
-        </ul>
+        <p class="project-lede">A platform that generates social media content — video, images, and voiceover — and publishes it directly to YouTube, TikTok, and Instagram, built solo from AI integration through app store submission.</p>
+        <button type="button" class="resume-trigger project-details-trigger" data-sheet-open="case-study-slidepress">See full details →</button>
         <a class="project-link" href="https://www.slidepress.co" target="_blank" rel="noopener">Visit slidepress.co ↗</a>
         <div class="stack">
           <span class="chip">Next.js</span><span class="chip">React</span><span class="chip">Supabase</span>
@@ -999,11 +994,8 @@
       <div class="project-content">
         <div class="project-meta">Personal Portfolio</div>
         <h3>Built and self-hosted — live on Vercel</h3>
-        <ul>
-          <li>Designed and built a custom single-page site (no framework) with a distinct visual identity, responsive layout, and accessible markup</li>
-          <li>Implemented technical SEO: Open Graph &amp; Twitter card metadata, JSON-LD structured data, sitemap.xml, robots.txt</li>
-          <li>Performance-tuned to Lighthouse scores of 99 (Performance), 98 (Accessibility), 96 (Best Practices), 100 (SEO) on mobile audit</li>
-        </ul>
+        <p class="project-lede">Designed, built, and self-hosted this site myself — the same care applied here as in the products above.</p>
+        <button type="button" class="resume-trigger project-details-trigger" data-sheet-open="case-study-portfolio">See full details →</button>
         <a class="project-link" href="https://www.rayburgos.com/" target="_blank" rel="noopener">Visit www.rayburgos.com ↗</a>
         <div class="stack">
           <span class="chip">HTML/CSS</span><span class="chip">Vercel</span><span class="chip">JSON-LD</span>
@@ -1180,6 +1172,75 @@
   <a href="mailto:keymacro.dev@gmail.com" class="btn btn-primary">Email Ray →</a>
 </div>
 
+<dialog class="resume-dialog" id="case-study-keymacro" aria-labelledby="case-study-keymacro-title">
+  <div class="resume-panel">
+    <div class="resume-top">
+      <div>
+        <div class="resume-tag">Case Study — KeyMacro.fit</div>
+        <h2 id="case-study-keymacro-title">AI-powered nutrition &amp; training platform</h2>
+      </div>
+      <button type="button" class="resume-close" aria-label="Close KeyMacro details">×</button>
+    </div>
+    <div class="resume-scroll">
+      <div class="resume-section">
+        <ul class="case-study-list">
+          <li>Built a first-party creator partner program — signed referral attribution at signup, an idempotent commission ledger reconciled from Stripe + RevenueCat webhooks with refund reversal handling, and a token-authenticated partner earnings dashboard requiring no account login</li>
+          <li>Shipped an in-app educational hub — 15 lessons across 3 tiers with freemium gating and curated learning paths, rule-based content recommendations, contextual links from the Workout module, and a trophy/milestone system tied to lesson progress</li>
+          <li>Solo-built cross-platform app — React/TypeScript PWA + Capacitor iOS/Android on Supabase — 203 React components, 17 custom hooks, 21 Deno Edge Functions, 44 Postgres migrations</li>
+          <li>Hybrid AI architecture (OpenAI) routed server-side — zero client-exposed API keys — meal planning, computer-vision food logging, and AI coaching with persistent memory</li>
+          <li>Unified Stripe (web) + RevenueCat (iOS/Android IAP) subscription system with database-level privilege guards</li>
+          <li>Native integrations: iOS WidgetKit + Android home-screen widgets, HealthKit/Health Connect sync, Face ID/biometric app lock</li>
+          <li>Production app scores 98 (Performance), 100 (Accessibility, Best Practices, SEO) on Lighthouse mobile audit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="resume-dialog" id="case-study-slidepress" aria-labelledby="case-study-slidepress-title">
+  <div class="resume-panel">
+    <div class="resume-top">
+      <div>
+        <div class="resume-tag">Case Study — SlidePress</div>
+        <h2 id="case-study-slidepress-title">AI-powered social media content platform</h2>
+      </div>
+      <button type="button" class="resume-close" aria-label="Close SlidePress details">×</button>
+    </div>
+    <div class="resume-scroll">
+      <div class="resume-section">
+        <ul class="case-study-list">
+          <li>Full-stack web app (Next.js 16, React 19, Supabase) with native iOS/Android apps via Capacitor</li>
+          <li>Integrated Google Gemini, Fal.ai, and ElevenLabs for content, image, and voice generation</li>
+          <li>Built OAuth publishing integrations with YouTube, TikTok, and Instagram, navigating each platform's formal developer review process</li>
+          <li>Stripe + RevenueCat billing, webhook-driven entitlements, usage metering; submitted through App Store Connect and Google Play Console</li>
+          <li>Production app scores 77 (Performance), 100 (Accessibility, Best Practices, SEO) on Lighthouse mobile audit — Jul 18, 2026, mobile emulation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="resume-dialog" id="case-study-portfolio" aria-labelledby="case-study-portfolio-title">
+  <div class="resume-panel">
+    <div class="resume-top">
+      <div>
+        <div class="resume-tag">Case Study — Portfolio</div>
+        <h2 id="case-study-portfolio-title">Built and self-hosted — live on Vercel</h2>
+      </div>
+      <button type="button" class="resume-close" aria-label="Close portfolio details">×</button>
+    </div>
+    <div class="resume-scroll">
+      <div class="resume-section">
+        <ul class="case-study-list">
+          <li>Designed and built a custom single-page site (no framework) with a distinct visual identity, responsive layout, and accessible markup</li>
+          <li>Implemented technical SEO: Open Graph &amp; Twitter card metadata, JSON-LD structured data, sitemap.xml, robots.txt</li>
+          <li>Performance-tuned to Lighthouse scores of 99 (Performance), 98 (Accessibility), 96 (Best Practices), 100 (SEO) on mobile audit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <dialog class="resume-dialog" id="resume-dialog" aria-labelledby="resume-title">
   <div class="resume-panel" id="resume-panel">
     <div class="resume-handle" aria-hidden="true"></div>
@@ -1226,7 +1287,7 @@
             <li>Integrated Google Gemini, Fal.ai, and ElevenLabs for content, image, and voice generation</li>
             <li>Built OAuth publishing integrations with YouTube, TikTok, and Instagram, navigating each platform's formal developer review process</li>
             <li>Stripe + RevenueCat billing, webhook-driven entitlements, usage metering; submitted through App Store Connect and Google Play Console</li>
-            <li>Production app scores 100 across Performance, Accessibility, Best Practices, and SEO on Lighthouse desktop audit</li>
+            <li>Production app scores 73 (Performance), 100 (Accessibility, Best Practices, SEO) on Lighthouse mobile audit</li>
           </ul>
         </div>
         <div class="resume-project">
@@ -1419,44 +1480,66 @@
     if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') closeMenu();
   });
 
-  /* resume modal / sheet */
-  var resumeDialog = document.getElementById('resume-dialog');
-  var resumeClose = document.getElementById('resume-close');
-  var resumePrint = document.getElementById('resume-print');
-  var resumeTriggers = document.querySelectorAll('[data-resume-open]');
-  var lastResumeTrigger = null;
+  /* sheet modals (resume + case studies) */
+  var sheetDialogs = document.querySelectorAll('.resume-dialog');
+  var lastSheetTrigger = null;
 
-  function openResume(trigger) {
-    lastResumeTrigger = trigger || null;
-    if (!resumeDialog.open) resumeDialog.showModal();
+  function anySheetOpen() {
+    for (var i = 0; i < sheetDialogs.length; i++) {
+      if (sheetDialogs[i].open) return true;
+    }
+    return false;
+  }
+
+  function openSheet(dialogId, trigger) {
+    var dialog = document.getElementById(dialogId);
+    if (!dialog) return;
+    lastSheetTrigger = trigger || null;
+    if (!dialog.open) dialog.showModal();
     document.body.classList.add('resume-open');
     if (mobileNav.classList.contains('is-open')) closeMenu();
-    resumeClose.focus();
+    var closeBtn = dialog.querySelector('.resume-close');
+    if (closeBtn) closeBtn.focus();
   }
 
-  function closeResume() {
-    if (resumeDialog.open) resumeDialog.close();
-    document.body.classList.remove('resume-open');
+  function closeSheet(dialog) {
+    if (dialog && dialog.open) dialog.close();
   }
 
-  resumeDialog.addEventListener('close', function () {
-    document.body.classList.remove('resume-open');
-    if (lastResumeTrigger) lastResumeTrigger.focus();
+  sheetDialogs.forEach(function (dialog) {
+    var closeBtn = dialog.querySelector('.resume-close');
+
+    dialog.addEventListener('close', function () {
+      if (!anySheetOpen()) document.body.classList.remove('resume-open');
+      if (lastSheetTrigger) {
+        lastSheetTrigger.focus();
+        lastSheetTrigger = null;
+      }
+    });
+
+    dialog.addEventListener('cancel', function (e) {
+      e.preventDefault();
+      closeSheet(dialog);
+    });
+
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog) closeSheet(dialog);
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', function () { closeSheet(dialog); });
   });
 
-  resumeDialog.addEventListener('cancel', function (e) {
-    e.preventDefault();
-    closeResume();
+  document.querySelectorAll('[data-sheet-open]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openSheet(btn.getAttribute('data-sheet-open'), btn);
+    });
   });
 
-  resumeDialog.addEventListener('click', function (e) {
-    if (e.target === resumeDialog) closeResume();
+  document.querySelectorAll('[data-resume-open]').forEach(function (btn) {
+    btn.addEventListener('click', function () { openSheet('resume-dialog', btn); });
   });
 
-  resumeTriggers.forEach(function (btn) {
-    btn.addEventListener('click', function () { openResume(btn); });
-  });
-  resumeClose.addEventListener('click', closeResume);
+  var resumePrint = document.getElementById('resume-print');
   if (resumePrint) {
     resumePrint.addEventListener('click', function () { window.print(); });
   }
